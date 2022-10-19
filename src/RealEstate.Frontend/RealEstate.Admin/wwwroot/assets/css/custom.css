@@ -1,0 +1,85 @@
+table > tbody > tr:last-child > th, table > tbody > tr:last-child > td {
+    border-bottom-width: 0;
+}
+
+.btn-admarket {
+    background-color: #4a158c;
+    border-color: #4a158c;
+}
+
+.bg-admarket {
+    background-color: #4a148c!important;
+}
+
+.bg-admarket-secondary {
+    background-color: #273444 !important;
+}
+
+.nofocus:focus {
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;    
+}
+
+.validation-message {
+    color: #FF5632;
+    font-size: 80%;
+    font-weight: 400;
+    padding: 5px 0 0 0;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    border-top: 1px solid #e9e9f2;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.form-phone-input .iti,
+.form-phone-input .iti input[type=tel]{
+    width: 100%;
+}
+
+.form-phone-input.start .iti input[type=tel]{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group > .form-phone-input{
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+.iti input[type=tel]{
+    display: block;
+    width: 100%;
+    padding: 0.5625rem 6px 0.5625rem 52px;
+    margin-left: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #737491;
+    background-clip: padding-box;
+    border: 1px solid #dfdfeb;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 0 0 transparent;
+    transition: border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
+}

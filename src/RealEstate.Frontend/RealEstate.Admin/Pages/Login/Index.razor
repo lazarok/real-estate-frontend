@@ -1,0 +1,136 @@
+@page "/login"
+
+@layout MainLayout
+
+ <main class="page-wrapper d-flex flex-column">
+ 
+    <header class="header navbar navbar-expand-lg navbar-light navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
+           <div class="container px-0 px-xl-3">
+             <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
+               <span class="navbar-toggler-icon"></span>
+             </button>
+             <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="index.html">
+               <img class="d-none d-lg-block" src="assets/img/logo/logo-dark.png" alt="Around" width="153">
+               <img class="d-lg-none" src="assets/img/logo/logo-icon.png" alt="Around" width="58">
+             </a>
+           </div>
+         </header>
+ 
+   <!-- Sign In Modal-->
+      <div class="modal fade" id="modal-signin" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content border-0">
+            <div class="view show" id="modal-signin-view">
+              <div class="modal-header border-0 bg-dark px-4">
+                <h4 class="modal-title text-light">Sign in</h4>
+                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="btn-close "></button>
+              </div>
+              <div class="modal-body px-4">
+                <p class="fs-ms text-muted">Sign in to your account using email and password provided during registration.</p>
+                <form class="needs-validation" novalidate>
+                  <div class="mb-3">
+                    <div class="input-group"><i class="ai-mail position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                      <input class="form-control rounded" type="email" placeholder="Email" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="input-group"><i class="ai-lock position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                      <div class="password-toggle w-100">
+                        <input class="form-control" type="password" placeholder="Password" required>
+                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                          <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-3 mb-3">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="keep-signed">
+                      <label class="form-check-label fs-sm" for="keep-signed">Keep me signed in</label>
+                    </div><a class="nav-link-style fs-ms" href="password-recovery.html">Forgot password?</a>
+                  </div>
+                  <button class="btn btn-primary d-block w-100" type="submit">Sign in</button>
+                  <p class="fs-sm pt-3 mb-0">Don't have an account? <a href='#' class='fw-medium' data-view='#modal-signup-view'>Sign up</a></p>
+                </form>
+              </div>
+            </div>
+            <div class="view" id="modal-signup-view">
+              <div class="modal-header border-0 bg-dark px-4">
+                <h4 class="modal-title text-light">Sign up</h4>
+                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="btn-close"></button>
+              </div>
+              <div class="modal-body px-4">
+                <p class="fs-ms text-muted">Registration takes less than a minute but gives you full control over your orders.</p>
+                <form class="needs-validation" novalidate>
+                  <div class="mb-3">
+                    <input class="form-control" type="text" placeholder="Full name" required>
+                  </div>
+                  <div class="mb-3">
+                    <input class="form-control" type="text" placeholder="Email" required>
+                  </div>
+                  <div class="mb-3 password-toggle">
+                    <input class="form-control" type="password" placeholder="Password" required>
+                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                      <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                    </label>
+                  </div>
+                  <div class="mb-3 password-toggle">
+                    <input class="form-control" type="password" placeholder="Confirm password" required>
+                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                      <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                    </label>
+                  </div>
+                  <button class="btn btn-primary d-block w-100" type="submit">Sign up</button>
+                  <p class="fs-sm pt-3 mb-0">Already have an account? <a href='#' class='fw-medium' data-view='#modal-signin-view'>Sign in</a></p>
+                </form>
+              </div>
+            </div>
+            <div class="modal-body text-center px-4 pt-2 pb-4">
+              <hr class="my-0">
+              <p class="fs-sm fw-medium text-heading pt-4">Or sign in with</p><a class="btn-social bs-facebook bs-lg mx-1 mb-2" href="#"><i class="ai-facebook"></i></a><a class="btn-social bs-twitter bs-lg mx-1 mb-2" href="#"><i class="ai-twitter"></i></a><a class="btn-social bs-instagram bs-lg mx-1 mb-2" href="#"><i class="ai-instagram"></i></a><a class="btn-social bs-google bs-lg mx-1 mb-2" href="#"><i class="ai-google"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Page content-->
+      <!-- Background image-->
+      <div class="d-none d-md-block position-absolute w-50 h-100 bg-size-cover" style="top: 0; right: 0; background-image: url(assets/img/property-img-2.jpg);"></div>
+      <!-- Actual content-->
+      <section class="container d-flex align-items-center pt-7 pb-3 pb-md-4" style="flex: 1 0 auto;">
+        <div class="w-100 pt-3">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 offset-lg-1">
+              <!-- Sign in view-->
+              <div class="view show" id="signin-view">
+                <h1 class="h2">Sign in</h1>
+                <p class="fs-ms text-muted mb-4">Sign in to your account using email and password provided during registration.</p>
+                <form class="needs-validation" novalidate>
+                  <div class="input-group mb-3"><i class="ai-mail position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                    <input class="form-control rounded" type="email" placeholder="Email" required>
+                  </div>
+                  <div class="input-group mb-3"><i class="ai-lock position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                    <div class="password-toggle w-100">
+                      <input class="form-control" type="password" placeholder="Password" required>
+                      <label class="password-toggle-btn" aria-label="Show/hide password">
+                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-3 pb-1">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="keep-signed-2">
+                      <label class="form-check-label" for="keep-signed-2">Keep me signed in</label>
+                    </div><a class="nav-link-style fs-ms" href="password-recovery.html">Forgot password?</a>
+                  </div>
+                  <button class="btn btn-primary d-block w-100" type="submit">Sign in</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+@code {
+    
+}

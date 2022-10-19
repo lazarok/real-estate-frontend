@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+        <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
+        <BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AspNetCore.SassCompiler" Version="1.55.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.8" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-dark.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-footer-alt.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-footer.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-icon-footer.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-icon.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\logo\logo-light.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\property-img-2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\img\signin-img.jpg" />
+    </ItemGroup>
+
+</Project>
