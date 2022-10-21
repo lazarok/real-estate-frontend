@@ -1,0 +1,140 @@
+@page "/admin/admins"
+@page "/admin/admins/{Page:int}"
+
+@using RealEstate.Admin.Models
+@using RealEstate.Admin.Services
+@using RealEstate.Shared.Resources
+@using Microsoft.Extensions.Localization
+
+@inject IHttpService _httpService
+@inject IStringLocalizer<GlobalStrings> _localizer
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _jsRuntime
+
+@attribute [Authorize(Roles = "SuperAdmin")]
+
+<div class="py-2 p-md-3">
+<!-- Title + Filters-->
+<div class="d-sm-flex align-items-center justify-content-between pb-2">
+    <h1 class="h3 mb-3 text-center text-sm-start">Admins</h1>
+    <div class="d-flex align-items-center mb-3">
+        <label class="form-label text-nowrap pe-1 me-2 mb-0">Filtros</label>
+        <select class="form-select form-select-sm">
+            <option>All</option>
+            <option>In progress</option>
+            <option>Delivered</option>
+            <option>Canceled</option>
+        </select>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <ErrorMessage Message="@_errorMessage"/>
+}
+else
+{
+    if (_admins == null)
+    {
+        <Loading/>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>@_localizer["Name"]</th>
+                    <th>@_localizer["Email"]</th>
+                    <th>@_localizer["Active"]</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (_admins.List.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4">
+                            <div class="my-2">
+                                <NotContent/>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var admin in _admins.List)
+                    {
+                        <tr>
+                            <td>@admin.FullName</td>
+                            <td>@admin.Email</td>
+                            <td>@admin.Active</td>
+                            <td>Acctions</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-2"/>
+        <Pagination Processing="_isBusy" BaseUrl="/admin/admins" PagedList="_admins" OnPageChanged="PageChanged"/>
+    }
+}
+
+
+</div>
+
+@code {
+    
+    [Parameter]
+    public int Page { get; set; }
+
+    private string _errorMessage;
+    private bool _isBusy;
+    private string _search;
+    private PagedList<AdminModel> _admins;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (Page < 1)
+        {
+            Page = 1;
+            _navigationManager.NavigateTo("/admin/admins/1");
+        }
+        
+        await LoadAdmins();
+    }
+    
+    private async Task LoadAdmins()
+    {
+        _errorMessage = null;
+        
+        var url = string.IsNullOrWhiteSpace(_search) ? $"admin/v1/admins?pageNumber={Page}" : $"admin/v1/admins?pageNumber={Page}&search={_search}";
+
+        _isBusy = true;
+        var response = await _httpService.GetAsync<PagedList<AdminModel>>(url);
+        _isBusy = false;
+
+        if (response.Success)
+        {
+            _admins = response.Data;
+        }
+        else
+        {
+            _errorMessage = response.Error.ToString();
+        }
+    }
+
+    private async Task SearchAdmins()
+    {
+        _navigationManager.NavigateTo("/admin/admins/1");
+        await PageChanged(1);
+    }
+
+    private async Task PageChanged(int page)
+    {
+        Page = page;
+        await LoadAdmins();
+    }
+
+}

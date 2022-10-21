@@ -1,0 +1,39 @@
+﻿@using RealEstate.Shared.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GlobalStrings> _localizer
+
+@if (!IsBusy)
+{
+    if (IsDisabled)
+    {
+        <button class="btn btn-primary" type="button" @attributes="AdditionalParameters" disabled>@ChildContent</button>
+    }
+    else
+    {
+        <button class="btn btn-primary" type="button" @onclick="OnClick" @attributes="AdditionalParameters">@ChildContent</button>
+    }
+}
+else
+{
+    <button class="btn btn-primary" type="button" disabled="disabled" @attributes="AdditionalParameters">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        @($"{_localizer["Processing"]}...")
+    </button>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter]
+    public bool IsBusy { get; set; } = false;
+    
+    [Parameter]
+    public bool IsDisabled { get; set; } = false;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object> AdditionalParameters { get; set; }
+}

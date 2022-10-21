@@ -1,0 +1,16 @@
+﻿@page "/admin"
+
+@using RealEstate.Admin.Services
+
+@inject ICurrentAccountService _currentAccountService
+@inject NavigationManager _navigationManager
+
+@attribute [Authorize(Roles = "Admin,SuperAdmin")]
+
+@code{
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _navigationManager.NavigateTo("/admin/admins");
+    }
+}

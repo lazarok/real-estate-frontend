@@ -1,10 +1,23 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@using RealEstate.Admin.Services
 
-<h1>Hello, world!</h1>
+@inject ICurrentAccountService _currentAccountService
+@inject NavigationManager _navigationManager
 
-<!-- Primary solid button -->
-<button type="button" class="btn btn-primary">Primary</button>
+@attribute [Authorize]
 
-Welcome to your new ap
+@code{
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (await _currentAccountService.IsAdminAsync() || await _currentAccountService.IsSuperAdminAsync())
+        {
+            _navigationManager.NavigateTo("/admin");
+        }
+        else
+        {
+            _navigationManager.NavigateTo("/agent");
+        }
+    }
+}

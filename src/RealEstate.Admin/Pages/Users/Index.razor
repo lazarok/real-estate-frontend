@@ -1,0 +1,13 @@
+﻿@page "/users"
+
+@inject NavigationManager _navigationManager
+
+@attribute [Authorize]
+
+@code{
+    
+    protected override void OnInitialized()
+    {
+        _navigationManager.NavigateTo("/users/agents");
+    }
+}

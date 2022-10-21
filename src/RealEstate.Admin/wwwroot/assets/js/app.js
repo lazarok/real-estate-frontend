@@ -11,17 +11,6 @@ window.setBlazorCulture = function(value) {
     localStorage['BlazorCulture'] = value;
 }
 
-window.stripeCheckout = function (publishableKey, sessionId) {
-
-    var stripe = Stripe(publishableKey);
-
-    stripe.redirectToCheckout({
-        sessionId: sessionId
-    }).then(function (result) {
-        console.log(result.error.message);
-    });
-}
-
 window.hideCollapse = function (elementId) {
     var collapse = bootstrap.Collapse.getInstance(document.getElementById(elementId));
     if (collapse)
@@ -36,37 +25,6 @@ window.showModal = function (modalId) {
 window.hideModal = function (modalId) {
     var modal = bootstrap.Modal.getInstance(document.getElementById(modalId))
     modal.hide();
-}
-
-window.openCart = function () {
-    var cart = new bootstrap.Offcanvas(document.getElementById('shoppingCart'));
-    cart.show();
-}
-
-window.hideCart = function () {
-    var cart = bootstrap.Offcanvas.getInstance(document.getElementById('shoppingCart'))
-    cart.hide();
-}
-
-window.scaleBannerPreview = function () {
-    const bannerWidth = 1920;
-    const bannerHeight = 275;
-
-    let wrap = document.querySelector(".wrap");
-    let frame = document.querySelector(".frame");
-
-    let w = wrap.parentElement.clientWidth - 48;
-    let h = w / (bannerWidth / bannerHeight);
-
-    wrap.style.width = w + "px";
-    wrap.style.height = h + "px"
-
-    frame.style.width = bannerWidth + "px";
-    frame.style.height = bannerHeight + "px"
-
-    frame.style.transform = 'scale(' + (w / bannerWidth) + ')';
-
-    window.onresize = scaleBannerPreview;
 }
 
 window.setNumber = function (id, number) {
@@ -90,6 +48,34 @@ window.setReadOnly = function (id, readOnly) {
     else{
         input.removeAttribute("readonly");
     }
+}
+
+window.initPasswordVisibilityToggle = function (){
+    var elements = document.querySelectorAll('.password-toggle');
+
+    var _loop2 = function _loop2(i) {
+        var passInput = elements[i].querySelector('.form-control'),
+            passToggle = elements[i].querySelector('.password-toggle-btn');
+        passToggle.addEventListener('click', function (e) {
+            if (e.target.type !== 'checkbox') return;
+
+            if (e.target.checked) {
+                passInput.type = 'text';
+            } else {
+                passInput.type = 'password';
+            }
+        }, false);
+    };
+
+    for (var i = 0; i < elements.length; i++) {
+        _loop2(i);
+    }
+}
+
+// https://www.syncfusion.com/faq/blazor/javascript-interop/how-do-i-get-a-browsers-culture-in-blazor-webassembly
+window.getBrowserLanguage = function () {
+    return (navigator.languages && navigator.languages.length) ? navigator.languages[0] :
+        navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en'
 }
 
 var tooltip = function () {

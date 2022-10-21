@@ -11,8 +11,27 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCore.SassCompiler" Version="1.55.0" />
+        <PackageReference Include="Blazored.FluentValidation" Version="2.0.3" />
+        <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.8" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.10" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RealEstate.Shared\RealEstate.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Admin\Admins\Index.razor" />
+      <AdditionalFiles Include="Pages\Login\Index.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Users\Admins\Index.razor" />
     </ItemGroup>
 
 </Project>

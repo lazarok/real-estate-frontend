@@ -1,0 +1,17 @@
+﻿@using Microsoft.Extensions.Localization
+@using RealEstate.Shared.Resources
+
+@inject IStringLocalizer<GlobalStrings> _localizer;
+
+<div class="text-center w-100 py-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">@_localizer["Loading"]...</span>
+  </div>
+  @ChildContent
+</div>
+
+
+@code{
+  [Parameter]
+  public RenderFragment ChildContent { get; set; }
+}

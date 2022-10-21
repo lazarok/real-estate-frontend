@@ -1,0 +1,101 @@
+@using RealEstate.Admin.Services
+@using RealEstate.Shared.Resources
+@using Microsoft.Extensions.Localization
+
+@inject ICurrentAccountService _currentAccountService
+@inject NavigationManager _navigationManager
+@inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
+@inject IStringLocalizer<GlobalStrings> _localizer
+
+<div class="col-lg-3 mb-4 mb-lg-0">
+    <div class="bg-light rounded-3 shadow-lg">
+        <div class="px-4 py-4 mb-1 text-center">
+            @if (Layout.Account != null)
+            {
+                <img class="d-block rounded-circle mx-auto my-2" src="assets/img/dashboard/avatar/main.jpg" at="Amanda Wilson" width="110">
+                <h6 class="mb-0 pt-1">@Layout.Account.FullName</h6>
+                <span class="text-muted fs-sm">@($"@{Layout.Account.Email}")</span>
+            }
+            else
+            {
+                <Loading/>
+            }
+        </div>
+        <div class="d-lg-none px-4 pb-4 text-center">
+            <a class="btn btn-primary px-5 mb-2" href="#account-menu" data-bs-toggle="collapse">
+                <i class="ai-menu me-2"></i>Account menu
+            </a>
+        </div>
+        <div class="d-lg-block collapse pb-2" id="account-menu">
+
+            <h3 class="d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3">Users</h3>
+
+            <NavLink href="/agent/agents" Match="NavLinkMatch.Prefix" class="d-flex align-items-center nav-link-style px-4 py-3">
+                <i class="ai-user fs-lg opacity-60 me-2"></i>Agents
+            </NavLink>
+
+            <NavLink href="/admin/admins" Match="NavLinkMatch.Prefix" class="d-flex align-items-center nav-link-style px-4 py-3 border-top">
+                <i class="ai-users fs-lg opacity-60 me-2"></i>Admins
+            </NavLink>
+            
+
+            <h3 class="d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3">Account settings</h3>
+
+            <a class="d-flex align-items-center nav-link-style px-4 py-3">Profile info</a>
+
+            <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top">Payment methods</a>
+
+            <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="javascript:void(0)" @onclick="Logout">
+                <i class="ai-log-out fs-lg opacity-60 me-2"></i>Sign out
+            </a>
+
+            @* <h3 class="d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3">Dashboard</h3> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 active" href="dashboard-orders.html"> *@
+            @*     <i class="ai-shopping-bag fs-lg opacity-60 me-2"></i>Orders *@
+            @*     <span class="nav-indicator"></span> *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">2</span> *@
+            @* </a> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-sales.html"> *@
+            @*     <i class="ai-dollar-sign fs-lg opacity-60 me-2"></i>Sales *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">$735.00</span> *@
+            @* </a> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-messages.html"> *@
+            @*     <i class="ai-message-square fs-lg opacity-60 me-2"></i>Messages *@
+            @*     <span class="nav-indicator"></span> *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">1</span> *@
+            @* </a> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-followers.html"> *@
+            @*     <i class="ai-users fs-lg opacity-60 me-2"></i>Followers *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">34</span> *@
+            @* </a> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-reviews.html"> *@
+            @*     <i class="ai-star fs-lg opacity-60 me-2"></i>Reviews *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">15</span> *@
+            @* </a> *@
+            @* *@
+            @* <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="dashboard-favorites.html"> *@
+            @*     <i class="ai-heart fs-lg opacity-60 me-2"></i>Favorites *@
+            @*     <span class="text-muted fs-sm fw-normal ms-auto">6</span> *@
+            @* </a> *@
+            @* *@
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [CascadingParameter]
+    public AdminLayout Layout { get; set; }
+    
+    private async void Logout()
+    {
+        await _jwtAuthenticationStateProvider.LogoutAsync();
+        _navigationManager.NavigateTo("/login");
+    }
+
+}

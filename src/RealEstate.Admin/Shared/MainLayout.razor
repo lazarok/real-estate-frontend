@@ -1,2 +1,19 @@
 ﻿@inherits LayoutComponentBase
-@Body
+
+<main class="page-wrapper d-flex flex-column">
+
+  <header class="header navbar navbar-expand-lg navbar-light navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
+    <div class="container px-0 px-xl-3">
+      <button class="navbar-toggler ms-n2 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="index.html">
+        <img class="d-none d-lg-block" src="assets/img/logo/logo-dark.png" alt="Around" width="153">
+        <img class="d-lg-none" src="assets/img/logo/logo-icon.png" alt="Around" width="58">
+      </a>
+    </div>
+  </header>
+
+  @Body
+
+</main>
