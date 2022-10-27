@@ -182,17 +182,11 @@ public class HttpService : IHttpService
                 return await Deserialize<T>(httpResponseMessage);
             }
 
-            // var content = await httpResponseMessage.Content.ReadFromJsonAsync<ApiError>();
-            // T response = new()
-            // {
-            //     Error = content
-            // };
-            
-            T response = new();
-            response.SetError(httpResponseMessage.ReasonPhrase, await httpResponseMessage.Content.ReadAsStringAsync());
-
             if (httpResponseMessage.StatusCode == HttpStatusCode.Unauthorized) // token expired
             {
+                T response = new();
+                response.SetError(httpResponseMessage.ReasonPhrase, await httpResponseMessage.Content.ReadAsStringAsync());
+                
                 string parameter = null;
 
                 try
@@ -214,11 +208,20 @@ public class HttpService : IHttpService
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.Forbidden)
             {
+                T response = new();
+                response.SetError(httpResponseMessage.ReasonPhrase, await httpResponseMessage.Content.ReadAsStringAsync());
+                
                 await _jwtAuthenticationState.LogoutAsync();
                 return response;
             }
+            
+            var content = await httpResponseMessage.Content.ReadFromJsonAsync<ApiError>();
+            T resp = new()
+            {
+                Error = content
+            };
 
-            return response;
+            return resp;
         }
         catch (Exception ex)
         {

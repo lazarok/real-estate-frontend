@@ -1,0 +1,101 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@using RealEstate.Admin.Services
+@using RealEstate.Shared.Resources
+@inject IHttpService _httpService
+@inject IStringLocalizer<GlobalStrings> _localizer
+@inject IJSRuntime _jsRuntime
+
+<div style="z-index: 100" aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-absolute bottom-0 start-0 p-3">
+        <div style="position: fixed; bottom: 5px;">
+            @foreach (var toast in _toasts)
+            {
+                <div id="toast-@toast.Id" class="toast fade hide mb-4" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="@toast.Delay">
+                    <div class="toast-header @BackgroundColorType(toast.Type) @TextColorTitleType(toast.Type)">
+                        <i class="@IconType(toast.Type) me-2"></i><span class="me-auto">@toast.Title</span>
+                        <button class="btn-close btn-close-white ms-2 mb-1" type="button" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body @TextColorBodyType(toast.Type)">@toast.Body</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    
+    private Guid _id;
+
+    private List<ToastModel> _toasts = new();
+
+    public async Task Show(ToastModel toast)
+    {
+        toast.Id = Guid.NewGuid();
+        
+        _id = toast.Id;
+        
+        _toasts.Add(toast);
+
+        Task.Delay(toast.Delay + 1000).ContinueWith(_ =>
+        {
+            _toasts.Remove(toast);
+        });
+
+        StateHasChanged();
+    }
+    
+    private string TextColorTitleType(ToastType type)
+    {
+        return type switch
+        {
+            ToastType.Warning => "text-white",
+            ToastType.Success => "text-white",
+            ToastType.Danger => "text-white",
+            _ => "text-white"
+        };
+    }
+    
+    private string TextColorBodyType(ToastType type)
+    {
+        return type switch
+        {
+            ToastType.Warning => "text-warning",
+            ToastType.Success => "text-success",
+            ToastType.Danger => "text-danger",
+            _ => "text-warning"
+        };
+    }
+    
+    private string BackgroundColorType(ToastType type)
+    {
+        return type switch
+        {
+            ToastType.Warning => "bg-warning",
+            ToastType.Success => "bg-success",
+            ToastType.Danger => "bg-danger",
+            _ => "bg-warning"
+        };
+    }
+    
+    private string IconType(ToastType type)
+    {
+        return type switch
+        {
+            ToastType.Warning => "ai-alert-triangle",
+            ToastType.Success => "ai-check-circle",
+            ToastType.Danger => "ai-slash",
+            _ => "ai-alert-triangle"
+        };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_id != default)
+        {
+            await _jsRuntime.InvokeVoidAsync("showToast", $"toast-{_id}");
+        }
+    }
+
+}

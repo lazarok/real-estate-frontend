@@ -54,6 +54,7 @@ public static class Extensions
         services.AddBlazoredLocalStorage();
 
         services.AddTransient<ICurrentAccountService, CurrentAccountService>();
+        services.AddSingleton<IToastService, ToastService>();
         services.AddScoped<TempData>();
     }
 

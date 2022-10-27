@@ -11,6 +11,9 @@
     <!-- Vendor Styles-->
     <link rel="stylesheet" media="screen" href="/assets/vendor/simplebar/dist/simplebar.min.css"/>
     <link rel="stylesheet" media="screen" href="/assets/vendor/tiny-slider/dist/tiny-slider.css"/>
+    <link rel="stylesheet" media="screen" href="/assets/vendor/prismjs/themes/prism.css"/>
+    <link rel="stylesheet" media="screen" href="/assets/vendor/prismjs/plugins/toolbar/prism-toolbar.css"/>
+    <link rel="stylesheet" media="screen" href="/assets/vendor/prismjs/plugins/line-numbers/prism-line-numbers.css"/>
     <link rel="stylesheet" media="screen" href="/assets/vendor/fontawesome/css/all.css"/>
     
 
@@ -43,7 +46,16 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss"><i class="ai-x"></i></a>
 </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+
+<script>
+   window.showToast = function(toastId){       
+       const myToastEl = document.getElementById(toastId)
+       const myToast = new bootstrap.Toast(myToastEl)
+       myToast.show();
+   }
+</script>
+
+<script src="_framework/blazor.webassembly.js"></script>
 
 <!-- Vendor scrits: js libraries and plugins-->
 <script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -51,6 +63,16 @@
 <script src="/assets/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
 <script src="/assets/vendor/tiny-slider/dist/min/tiny-slider.js"></script>
 <script src="/assets/vendor/cleave.js/dist/cleave.min.js"></script>
+
+
+<script src="/assets/vendor/prismjs/components/prism-core.min.js"></script>
+<script src="/assets/vendor/prismjs/components/prism-markup.min.js"></script>
+<script src="/assets/vendor/prismjs/components/prism-clike.min.js"></script>
+<script src="/assets/vendor/prismjs/components/prism-javascript.min.js"></script>
+<script src="/assets/vendor/prismjs/components/prism-pug.min.js"></script>
+<script src="/assets/vendor/prismjs/plugins/toolbar/prism-toolbar.min.js"></script>
+<script src="/assets/vendor/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+<script src="/assets/vendor/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
 
 <!-- Main theme script-->

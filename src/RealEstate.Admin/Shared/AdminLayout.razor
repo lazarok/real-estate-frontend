@@ -4,81 +4,96 @@
 @using Microsoft.Extensions.Localization
 
 @inject IHttpService _httpService
+@inject IToastService _toastService;
 @inject IStringLocalizer<GlobalStrings> _localizer
 
 @inherits LayoutComponentBase
 
 <CascadingValue Value="this">
-<main class="page-wrapper">
-    <!-- Navbar (Floating light)-->
-    <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
-    <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
-        <div class="container px-0 px-xl-3">
-            <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/">
-                <img class="navbar-floating-logo d-none d-lg-block" src="assets/img/logo/logo-light.png" alt="Around" width="153">
-                <img class="navbar-stuck-logo" src="assets/img/logo/logo-dark.png" alt="Around" width="153">
-                <img class="d-lg-none" src="img/logo/logo-icon.png" alt="Around" width="58">
-            </a>
-            <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
-                @if (Account != null)
-                {
-                    <div class="navbar-tool">
-                        <a class="navbar-tool-icon-box" href="profile">
-                            <img class="navbar-tool-icon-box-img" src="assets/img/dashboard/avatar/main-sm.jpg" alt="Avatar">
-                        </a>
-                        <a class="navbar-tool-label" href="profile">
-                            <small>@_localizer["Hello"],</small>@Account?.FullName
-                        </a>
-                    </div>
-                }
-                else
-                {
-                    <Loading/>
-                }
+    <main class="page-wrapper">
+        <!-- Navbar (Floating light)-->
+        <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page.-->
+        <header class="header navbar navbar-expand-lg navbar-dark navbar-floating navbar-sticky" data-scroll-header data-fixed-element>
+            <div class="container px-0 px-xl-3">
+                <a class="navbar-brand flex-shrink-0 order-lg-1 mx-auto ms-lg-0 pe-lg-2 me-lg-4" href="/">
+                    <img class="navbar-floating-logo d-none d-lg-block" src="assets/img/logo/logo-light.png" alt="Around" width="153">
+                    <img class="navbar-stuck-logo" src="assets/img/logo/logo-dark.png" alt="Around" width="153">
+                    <img class="d-lg-none" src="img/logo/logo-icon.png" alt="Around" width="58">
+                </a>
+                <div class="d-flex align-items-center order-lg-3 ms-lg-auto">
+                    @if (Account != null)
+                    {
+                        <div class="navbar-tool">
+                            <a class="navbar-tool-icon-box" href="profile">
+                                <img class="navbar-tool-icon-box-img" src="assets/img/dashboard/avatar/main-sm.jpg" alt="Avatar">
+                            </a>
+                            <a class="navbar-tool-label" href="profile">
+                                <small>@_localizer["Hello"],</small>@Account?.FullName
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <Loading/>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <!-- Page content-->
+        <!-- Slanted background-->
+        <div class="position-relative bg-gradient" style="height: 480px;">
+            <div class="shape shape-bottom shape-slant bg-secondary d-none d-lg-block">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
+                    <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
+                </svg>
             </div>
         </div>
-    </header>
+        <!-- Page content-->
+        <div class="container position-relative zindex-5 pb-4 mb-md-3" style="margin-top: -350px;">
+            <div class="row">
+                <SideBar/>
 
-    <!-- Page content-->
-    <!-- Slanted background-->
-    <div class="position-relative bg-gradient" style="height: 480px;">
-        <div class="shape shape-bottom shape-slant bg-secondary d-none d-lg-block">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 260">
-                <polygon fill="currentColor" points="0,257 0,260 3000,260 3000,0"></polygon>
-            </svg>
-        </div>
-    </div>
-    <!-- Page content-->
-    <div class="container position-relative zindex-5 pb-4 mb-md-3" style="margin-top: -350px;">
-        <div class="row">
-            <SideBar/>
-        
-            <!-- Content-->
-            <div class="col-lg-9">
-                <div class="d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4">
-                    @Body
+                <!-- Content-->
+                <div class="col-lg-9">
+                    <div class="d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4">
+                        @Body
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
-</CascadingValue>
 
-<Footer/>
+        @_modalSection
+    </main>
+
+    <Toast @ref="_toast"/>
+
+    <Footer/>
+
+</CascadingValue>
 
 @code{
 
+    private Toast _toast;
     public AdminAccountModel Account { get; set; }
 
     public event Action AccountLoaded;
 
     private string _errorMessage;
-    
+
     private RenderFragment _modalSection;
+    
+    private RenderFragment _toastsSection;
 
     public void SetModalSection(RenderFragment modalSection)
     {
         _modalSection = modalSection;
+        StateHasChanged();
+    }
+    
+    public void SetToastsSection(RenderFragment toastSection)
+    {
+        _toastsSection = toastSection;
         StateHasChanged();
     }
 
@@ -90,6 +105,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _toastService.ShowAction += async toast =>
+        {
+            await _toast.Show(toast);
+        };
+        
         await LoadAccount();
     }
 

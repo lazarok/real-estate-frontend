@@ -5,7 +5,7 @@
 @using RealEstate.Shared.Resources
 
 @inject IHttpService _httpService
-@inject IJSRuntime _jSRuntime
+@inject IJSRuntime _jsRuntime
 @inject NavigationManager _navigationManager
 @inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
 @inject IStringLocalizer<GlobalStrings> _localizer
@@ -93,7 +93,7 @@
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
-    await _jSRuntime.InvokeVoidAsync("initPasswordVisibilityToggle");
+    await _jsRuntime.InvokeVoidAsync("initPasswordVisibilityToggle");
   }
 
 }

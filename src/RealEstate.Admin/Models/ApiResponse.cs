@@ -41,6 +41,13 @@ public class ApiError
         
     public override string ToString()
     {
-        return !string.IsNullOrEmpty(Message) ? Message : Status;
+        if (ErrorMessages == null || ErrorMessages.Count == 0)
+        {
+            return !string.IsNullOrEmpty(Message) ? Message : Status;
+        }
+        else
+        {
+            return  string.Join(".\n", ErrorMessages);
+        }
     }
 }
