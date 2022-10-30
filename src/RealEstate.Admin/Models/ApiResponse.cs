@@ -47,7 +47,7 @@ public class ApiError
         }
         else
         {
-            return  string.Join(".\n", ErrorMessages);
+            return  string.Join("\n", ErrorMessages);
         }
     }
 }

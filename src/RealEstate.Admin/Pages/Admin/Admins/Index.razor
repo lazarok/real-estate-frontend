@@ -37,10 +37,9 @@
         }
         else
         {
-            <div class="d-flex align-items-center w-50 mb-3">
+            <div class="d-flex align-items-center w-100 mb-3">
                 <form class="w-100" @onsubmit=SearchAdmins>
                     <div class="input-group">
-                        <input class="form-control" type="text" placeholder="@($"{_localizer["Search by name or email"]} ...")" autocomplete="off" @bind-value="_search">
                         @if (!_isBusy)
                         {
                             <button class="btn btn-white btn-icon border" type="submit">
@@ -53,6 +52,7 @@
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             </button>
                         }
+                        <input class="form-control" type="text" placeholder="@($"{_localizer["Search by name or email"]} ...")" autocomplete="off" @bind-value="_search">
                     </div>
                 </form>
             </div>
@@ -119,29 +119,14 @@
 
 </div>
 
-<AdminLayoutSetter>
-    <ModalSection>
-        @if (Layout.Account != null)
-        {
-            <CreateAdminModal @ref="_createAdminModal" OnSubmitted="CreateAdminSubmittedAsync"></CreateAdminModal>
-            <EditAdminModal @ref="_editAdminModal" OnSubmitted="CreateAdminSubmittedAsync"></EditAdminModal>
-        }
-    </ModalSection>
-</AdminLayoutSetter>
-
 @code {
-    
-    [CascadingParameter]
-    public AdminLayout Layout { get; set; }
-    
+
     [Parameter]
     public int Page { get; set; }
-    
-    private CreateAdminModal _createAdminModal;
-    private EditAdminModal _editAdminModal;
 
     private string _errorMessage;
     private bool _isBusy;
+    private bool _isBusyEdit;
     private string _search;
     private PagedList<AdminModel> _admins;
     
@@ -187,22 +172,15 @@
         Page = page;
         await LoadAdmins();
     }
-    
-    private async Task ShowCreateAdmin()
+
+    private void ShowCreateAdmin()
     {
-        await _createAdminModal.Show();
-    }
-    
-    private async Task ShowEditAdmin(string adminSku)
-    {
-        await _editAdminModal.Show(adminSku);
+        _navigationManager.NavigateTo($"admin/admins/create");
     }
 
-    private async Task CreateAdminSubmittedAsync()
+    private async Task ShowEditAdmin(string adminSku)
     {
-       _toastService.Show(body: _localizer["Admin has been created successfully"], type:ToastType.Success);
-        
-        await LoadAdmins();
+        _navigationManager.NavigateTo($"admin/admins/edit/{adminSku}");
     }
 
 }

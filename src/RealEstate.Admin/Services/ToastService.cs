@@ -29,7 +29,7 @@ public class ToastService : IToastService
             {
                 ToastType.Warning => _localizer["Warning"],
                 ToastType.Success => _localizer["Success"],
-                ToastType.Danger => _localizer["Danger"],
+                ToastType.Danger => _localizer["Error"],
                 _ => _localizer["Warning"]
             };
         }

@@ -1,0 +1,94 @@
+﻿@inject IJSRuntime _jsRuntime
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-@_id">
+    <div class="modal-dialog modal-dialog-centered @Size" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="ContentCss">
+                    @if (ChildContent == null)
+                    {
+                        if (!string.IsNullOrEmpty(Title))
+                        {
+                            <h5 class="mt-4">@Title</h5>
+                        }
+                        if (!string.IsNullOrEmpty(Message))
+                        {
+                            <p class="text-sm">@((MarkupString)Message)</p>
+                        }
+                    }
+                    else
+                    {
+                        @ChildContent
+                    }
+                </div>
+                <div class="mt-4 text-end">
+                    <button type="button" class="btn btn-secondary px-4 me-2" data-bs-dismiss="modal" @onclick="OnClose">@CloseText</button>
+                    @if (!HideOkButton)
+                    {
+                        if (AutoHide)
+                        {
+                            <button type="button" class="btn @ContentBtnAppearance px-4" @onclick="OnOk" data-bs-dismiss="modal">@OkText</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn @ContentBtnAppearance px-4" @onclick="OnOk">@OkText</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private Guid _id = Guid.NewGuid();
+    
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Message { get; set; }
+
+    [Parameter]
+    public string OkText { get; set; } = "Ok";
+
+    [Parameter]
+    public string CloseText { get; set; } = "Close";
+    
+    [Parameter]
+    public string ContentCss { get; set; } = "text-center";
+    [Parameter]
+    public string ContentBtnAppearance { get; set; } = "btn-primary";
+    
+    [Parameter]
+    public string Size { get; set; } = "";
+
+    [Parameter]
+    public EventCallback OnOk { get; set; }
+
+    [Parameter]
+    public bool HideOkButton { get; set; } = false;
+    
+    [Parameter]
+    public bool AutoHide { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public async Task Show()
+    {
+        await _jsRuntime.InvokeAsync<object>("showModal", $"modal-{_id}");
+        StateHasChanged();
+    }
+    
+    public async Task Hide()
+    {
+        await _jsRuntime.InvokeAsync<object>("hideModal", $"modal-{_id}");
+        StateHasChanged();
+    }
+}

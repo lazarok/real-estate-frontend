@@ -1,0 +1,100 @@
+@page "/admin/admins/create"
+
+@using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.Localization
+@using RealEstate.Admin.Models
+@using RealEstate.Admin.Services
+@using RealEstate.Shared.Resources
+
+@inject IHttpService _httpService
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigationManager
+@inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
+@inject IStringLocalizer<GlobalStrings> _localizer
+@inject IConfiguration _configuration
+@inject IToastService _toastService
+
+<div class="py-2 p-md-3">
+    <!-- Title + Filters-->
+    <div class="d-sm-flex align-items-center justify-content-between pb-2">
+        <h1 class="h3 mb-3 text-center text-sm-start">@_localizer["Create Admin"]</h1>
+    </div>
+    <EditForm Model="_model" OnValidSubmit="Submit">
+        <FluentValidationValidator/>
+
+        <div class="mb-3 align-items-center">
+            <label class="form-label">@_localizer["Name"]</label>
+            <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
+            <ValidationMessage For="@(() => _model.FullName)"/>
+        </div>
+        <div class="mb-3 align-items-center">
+            <label class="form-label">@_localizer["Email"]</label>
+            <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
+            <ValidationMessage For="@(() => _model.Email)"/>
+        </div>
+
+        <div class="mb-3 align-items-center">
+            <label class="form-label">@_localizer["Password"]</label>
+            <div class="input-group">
+                <i class="ai-lock position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                <div class="password-toggle w-100">
+                    <InputText class="form-control" type="password" maxlength="16" placeholder=@_localizer["Enter the password"] @bind-Value="@_model.Password"/>
+                    <label class="password-toggle-btn" aria-label="Show/hide password">
+                        <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                    </label>
+                </div>
+            </div>
+            <ValidationMessage For="@(() => _model.Password)"/>
+        </div>
+
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <ErrorMessage Message="@_errorMessage"></ErrorMessage>
+        }
+
+
+        <div class="d-flex w-100 mt-md-6">
+            <div class="flex-grow-1">
+            </div>
+            <div>
+                <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin/admins"))">@_localizer["Close"]</button>
+                <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
+            </div>
+        </div>
+
+    </EditForm>
+</div>
+
+
+@code {
+
+    private readonly AdminCreateModel _model = new();
+
+    private bool _isBusy;
+    private string _errorMessage;
+
+    private async Task Submit()
+    {
+        _errorMessage = null;
+
+        _isBusy = true;
+        var response = await _httpService.PostAsync("admin/v1/admins", _model);
+        _isBusy = false;
+
+        if (response.Success)
+        {
+            _navigationManager.NavigateTo("admin/admins");
+            _toastService.Show(body: _localizer["Admin has been created successfully"], type: ToastType.Success);
+        }
+        else
+        {
+            _errorMessage = response.Error.ToString();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _jsRuntime.InvokeVoidAsync("initPasswordVisibilityToggle");
+    }
+
+}
