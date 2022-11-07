@@ -73,6 +73,9 @@
 </CascadingValue>
 
 @code{
+    
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
     private Toast _toast;
     public AdminAccountModel Account { get; set; }

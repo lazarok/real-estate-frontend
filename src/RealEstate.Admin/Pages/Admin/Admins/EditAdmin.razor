@@ -1,6 +1,5 @@
 @page "/admin/admins/edit/{AdminSku}"
 
-@using System.Globalization
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.Localization
 @using RealEstate.Admin.Models
@@ -14,6 +13,10 @@
 @inject IStringLocalizer<GlobalStrings> _localizer
 @inject IToastService _toastService
 @inject IConfiguration _configuration
+
+@layout AdminLayout
+
+@attribute [Authorize(Roles = "SuperAdmin")]
 
 <div class="py-2 p-md-3">
     <!-- Title + Filters-->
@@ -58,7 +61,7 @@
 
             <div class="d-flex w-100 mt-md-6">
                 <div class="flex-grow-1">
-                    <ButtonRE IsBusy="_isBusy" class="btn btn-translucent-danger" OnClick="() => _confirmDelete.Show()">@_localizer["Delete"]</ButtonRE>
+                    <ButtonRE class="btn btn-translucent-danger" OnClick="ShowDelete">@_localizer["Delete"]</ButtonRE>
                 </div>
                 <div>
                     <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin/admins"))">@_localizer["Close"]</button>
@@ -72,16 +75,13 @@
 
 <AdminLayoutSetter>
     <ModalSection>
-        @if (Layout.Account != null)
-        {
-            <ResetPasswordModal @ref="_resetPasswordModal" OnSubmitted="ResetPasswordSubmittedAsync"></ResetPasswordModal>
-            <Modal @ref="_confirmDelete" ContentBtnAppearance="btn-danger"  CloseText="@_localizer["No"]" OkText="@_localizer["Yes"]" OnOk="@DeleteAdmin" AutoHide="true">
-                <h5 class="text-danger">@_localizer["Are you sure you want to delete this admin?"]</h5>
-                <div class="mt-2">
-                    @(($"{_localizer["User will be deleted and cannot be recovered"]}."))
-                </div>
-            </Modal>
-        }
+        <ResetPasswordModal @ref="_resetPasswordModal" OnSubmitted="ResetPasswordSubmittedAsync"></ResetPasswordModal>
+        <Modal @ref="_confirmDelete" ContentBtnAppearance="btn-danger" CloseText="@_localizer["No"]" OkText="@_localizer["Yes"]" OnOk="@DeleteAdmin" AutoHide="true">
+            <h5 class="text-danger">@_localizer["Are you sure you want to delete this admin?"]</h5>
+            <div class="mt-2">
+                @(($"{_localizer["User will be deleted and cannot be recovered"]}."))
+            </div>
+        </Modal>
     </ModalSection>
 </AdminLayoutSetter>
 
@@ -145,6 +145,11 @@
         }
         else
         {
+            if (response.Error.Status == "NotFound")
+            {
+                _navigationManager.NavigateTo($"admin/admins");
+                return;
+            }
             _errorMessage = response.Error.ToString();
         }
     }
@@ -163,6 +168,8 @@
 
     private async Task DeleteAdmin()
     {
+        await _confirmDelete.Hide();
+        
         _errorMessage = null;
 
         _isBusy = true;
@@ -183,6 +190,16 @@
     private void ResetPasswordSubmittedAsync()
     {
         _toastService.Show(body: _localizer["Reset password successfully"], type:ToastType.Success);
+    }
+
+    private async Task ShowDelete()
+    {
+        if (_confirmDelete == null)
+        {
+            Console.WriteLine("_confirmDelete == null");
+            return;
+        }
+        await _confirmDelete.Show();
     }
 
 }

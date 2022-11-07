@@ -8,48 +8,51 @@
 @if (PagedList.CurrentPage <= PagedList.TotalPages)
 {
     <div class="d-flex justify-content-between">
-        <div class="d-flex align-items-center">@($"{_localizer["Page"]} {PagedList.CurrentPage} {_localizer["of"]} {PagedList.TotalPages}")</div>
-        <nav>
-            <ul class="pagination">
-      
-                <li class="page-item @(PagedList.HasPreviousPage ? "" : "disabled")">
-                    <a href="javascript:void(0)" @onclick="@(() => HandlerSelectedChanged(PagedList.CurrentPage - 1))" class="page-link">
-                        <i class="ai-chevron-left"></i>
-                    </a>
-                </li>
-      
-                @{
-                    var start = Math.Max(1, PagedList.CurrentPage - _middleCount);
-                }
-                @for (var pag1 = start; pag1 < PagedList.CurrentPage; pag1++)
-                {
-                    <li class="page-item d-none d-sm-block">
-                        <a class="page-link">
-                            @pag1
-                        </a>
-                    </li> 
-                }
+        <div class="d-flex align-items-center">@($"{_localizer["Total"]}: {PagedList.TotalCount}")</div>
+        <div class="d-flex d-flex justify-content-between">
+            <div class="d-flex align-items-center pe-4">@($"{_localizer["Page"]} {PagedList.CurrentPage} {_localizer["of"]} {PagedList.TotalPages}")</div>
+            <nav class="d-inline">
+                <ul class="pagination">
 
-                <li class="page-item active d-none d-sm-block" aria-current="page">
-                    <span class="page-link">@PagedList.CurrentPage</span>
-                </li>
-
-                @for (var pag2 = PagedList.CurrentPage + 1; pag2 <= PagedList.TotalPages && pag2 <= PagedList.CurrentPage + _middleCount; pag2++)
-                {
-                    <li class="page-item d-none d-sm-block">
-                        <a class="page-link">
-                            @pag2
+                    <li class="page-item @(PagedList.HasPreviousPage ? "" : "disabled")">
+                        <a href="javascript:void(0)" @onclick="@(() => HandlerSelectedChanged(PagedList.CurrentPage - 1))" class="page-link">
+                            <i class="ai-chevron-left"></i>
                         </a>
                     </li>
-                }
 
-                <li class="page-item @(PagedList.HasNextPage ? "" : "disabled")">
-                    <a href="javascript:void(0)" @onclick="@(() => HandlerSelectedChanged(PagedList.CurrentPage + 1))" class="page-link">
-                        <i class="ai-chevron-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    @{
+                        var start = Math.Max(1, PagedList.CurrentPage - _middleCount);
+                    }
+                    @for (var pag1 = start; pag1 < PagedList.CurrentPage; pag1++)
+                    {
+                        <li class="page-item d-none d-sm-block">
+                            <a class="page-link">
+                                @pag1
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item active d-none d-sm-block" aria-current="page">
+                        <span class="page-link">@PagedList.CurrentPage</span>
+                    </li>
+
+                    @for (var pag2 = PagedList.CurrentPage + 1; pag2 <= PagedList.TotalPages && pag2 <= PagedList.CurrentPage + _middleCount; pag2++)
+                    {
+                        <li class="page-item d-none d-sm-block">
+                            <a class="page-link">
+                                @pag2
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @(PagedList.HasNextPage ? "" : "disabled")">
+                        <a href="javascript:void(0)" @onclick="@(() => HandlerSelectedChanged(PagedList.CurrentPage + 1))" class="page-link">
+                            <i class="ai-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 }
 

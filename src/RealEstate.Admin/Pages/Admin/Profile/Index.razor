@@ -1,0 +1,119 @@
+@page "/admin/profile"
+
+@inject IHttpService _httpService
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigationManager
+@inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
+@inject IStringLocalizer<GlobalStrings> _localizer
+@inject IToastService _toastService
+@inject IConfiguration _configuration
+
+@layout AdminLayout
+
+@attribute [Authorize(Roles = "SuperAdmin")]
+
+<div class="py-2 p-md-3">
+    <!-- Title + Filters-->
+    <div class="d-sm-flex align-items-center justify-content-between pb-2">
+        <h1 class="h3 mb-3 text-center text-sm-start">@_localizer["Profile"]</h1>
+    </div>
+
+    @if (_model == null)
+    {
+        <Loading/>
+    }
+    else
+    {
+        <EditForm Model="_model" OnValidSubmit="Submit">
+            <FluentValidationValidator/>
+
+            <div class="mb-3 align-items-center">
+                <label class="form-label">@_localizer["Name"]</label>
+                <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
+                <ValidationMessage For="@(() => _model.FullName)"/>
+            </div>
+            <div class="mb-3 align-items-center">
+                <label class="form-label">@_localizer["Email"]</label>
+                <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
+                <ValidationMessage For="@(() => _model.Email)"/>
+            </div>
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <ErrorMessage Message="@_errorMessage"></ErrorMessage>
+            }
+
+            <div class="d-flex w-100 mt-md-6">
+                <div class="flex-grow-1">
+                    <div class="align-items-center">
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-link align-self-center" @onclick="ChangePassword">@_localizer["Change Password"]</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin"))">@_localizer["Cancel"]</button>
+                    <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
+                </div>
+            </div>
+        </EditForm>
+    }
+
+</div>
+
+@code {
+
+    [CascadingParameter]
+    public AdminLayout Layout { get; set; }
+    
+    private ResetPasswordModal _resetPasswordModal;
+
+    private AdminAccountUpdateModel _model;
+
+    private bool _isBusy;
+    private bool _isBusyResetPassword;
+    private string _errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Layout.AccountLoaded += Load;
+
+        if (Layout.Account != null)
+        {
+            Load();
+        }
+    }
+
+    private void Load()
+    {
+        _model = new AdminAccountUpdateModel
+        {
+            Email = Layout.Account.Email, 
+            FullName = Layout.Account.FullName
+        };
+    }
+
+    private async Task Submit()
+    {
+        _errorMessage = null;
+        
+        _isBusy = true;
+        var response = await _httpService.PutAsync($"admin/v1/account", _model);
+        _isBusy = false;
+        
+        if (response.Success)
+        {
+            _toastService.Show(body: _localizer["The current account has been edited successfully"], type: ToastType.Success);
+            await Layout.RefreshAccount();
+        }
+        else
+        {
+            _errorMessage = response.Error.ToString();
+        }
+    }
+
+    private async Task ChangePassword()
+    {
+        _navigationManager.NavigateTo("admin/profile/changepassword");
+    }
+}

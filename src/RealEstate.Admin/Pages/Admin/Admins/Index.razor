@@ -12,6 +12,8 @@
 @inject IToastService _toastService
 @inject IJSRuntime _jsRuntime
 
+@layout AdminLayout
+
 @attribute [Authorize(Roles = "SuperAdmin")]
 
 <div class="py-2 p-md-3">
@@ -118,6 +120,8 @@
 
 
 </div>
+
+<AdminLayoutSetter></AdminLayoutSetter>
 
 @code {
 

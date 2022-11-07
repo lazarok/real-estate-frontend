@@ -184,6 +184,11 @@ public class HttpService : IHttpService
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
+                if (httpResponseMessage.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return new T();
+                }
+                
                 return await Deserialize<T>(httpResponseMessage);
             }
 
