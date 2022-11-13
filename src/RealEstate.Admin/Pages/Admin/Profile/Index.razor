@@ -27,15 +27,20 @@
         <EditForm Model="_model" OnValidSubmit="Submit">
             <FluentValidationValidator/>
 
-            <div class="mb-3 align-items-center">
-                <label class="form-label">@_localizer["Name"]</label>
-                <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
-                <ValidationMessage For="@(() => _model.FullName)"/>
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-3 col-form-label">@_localizer["Name"]</label>
+                <div class="col-md-9">
+                    <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
+                    <ValidationMessage For="@(() => _model.FullName)"/>
+                </div>
             </div>
-            <div class="mb-3 align-items-center">
-                <label class="form-label">@_localizer["Email"]</label>
-                <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
-                <ValidationMessage For="@(() => _model.Email)"/>
+            
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-3 form-label">@_localizer["Email"]</label>
+                <div class="col-md-9">
+                    <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
+                    <ValidationMessage For="@(() => _model.Email)"/>
+                </div>
             </div>
 
             @if (!string.IsNullOrEmpty(_errorMessage))
@@ -43,19 +48,18 @@
                 <ErrorMessage Message="@_errorMessage"></ErrorMessage>
             }
 
-            <div class="d-flex w-100 mt-md-6">
-                <div class="flex-grow-1">
-                    <div class="align-items-center">
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-link align-self-center" @onclick="ChangePassword">@_localizer["Change Password"]</button>
-                        </div>
+            <div class="row mb-3 align-items-center mt-4 pt-4 border-top">
+                <div class="col-6">
+                    <button type="button" class="btn btn-link" @onclick="ChangePassword">@_localizer["Change Password"]</button>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin"))">@_localizer["Cancel"]</button>
+                        <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
                     </div>
                 </div>
-                <div>
-                    <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin"))">@_localizer["Cancel"]</button>
-                    <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
-                </div>
             </div>
+            
         </EditForm>
     }
 
@@ -65,7 +69,7 @@
 
     [CascadingParameter]
     public AdminLayout Layout { get; set; }
-    
+
     private ResetPasswordModal _resetPasswordModal;
 
     private AdminAccountUpdateModel _model;
@@ -88,7 +92,7 @@
     {
         _model = new AdminAccountUpdateModel
         {
-            Email = Layout.Account.Email, 
+            Email = Layout.Account.Email,
             FullName = Layout.Account.FullName
         };
     }
@@ -96,11 +100,11 @@
     private async Task Submit()
     {
         _errorMessage = null;
-        
+
         _isBusy = true;
         var response = await _httpService.PutAsync($"admin/v1/account", _model);
         _isBusy = false;
-        
+
         if (response.Success)
         {
             _toastService.Show(body: _localizer["The current account has been edited successfully"], type: ToastType.Success);
@@ -116,4 +120,5 @@
     {
         _navigationManager.NavigateTo("admin/profile/changepassword");
     }
+
 }

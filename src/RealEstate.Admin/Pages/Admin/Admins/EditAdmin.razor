@@ -33,18 +33,23 @@
         <EditForm Model="_model" OnValidSubmit="Submit">
             <FluentValidationValidator/>
 
-            <div class="mb-3 align-items-center">
-                <label class="form-label">@_localizer["Name"]</label>
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-3 form-label">@_localizer["Name"]</label>
+                <div class="col-md-9">
                 <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
                 <ValidationMessage For="@(() => _model.FullName)"/>
+                </div>
             </div>
-            <div class="mb-3 align-items-center">
-                <label class="form-label">@_localizer["Email"]</label>
+            
+            <div class="row mb-3 align-items-center">
+                <label class="col-md-3 form-label">@_localizer["Email"]</label>
+                <div class="col-md-9">
                 <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
                 <ValidationMessage For="@(() => _model.Email)"/>
+                </div>
             </div>
 
-            <div class="mb-3 align-items-center">
+            <div class="row mb-3 align-items-center">
                 <div class="d-flex justify-content-between">
                     <button type="button" class="btn btn-link align-self-center" @onclick="ResetPassword">Change Password</button>
                     <div class="form-check form-switch align-self-center">
@@ -59,15 +64,18 @@
                 <ErrorMessage Message="@_errorMessage"></ErrorMessage>
             }
 
-            <div class="d-flex w-100 mt-md-6">
-                <div class="flex-grow-1">
+            <div class="row mb-3 align-items-center mt-4 pt-4 border-top">
+                <div class="col-6">
                     <ButtonRE class="btn btn-translucent-danger" OnClick="ShowDelete">@_localizer["Delete"]</ButtonRE>
                 </div>
-                <div>
-                    <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin/admins"))">@_localizer["Close"]</button>
-                    <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
+                <div class="col-6">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin/admins"))">@_localizer["Close"]</button>
+                        <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
+                    </div>
                 </div>
             </div>
+            
         </EditForm>
     }
 
