@@ -8,6 +8,8 @@
 @inject IConfiguration _configuration
 @inject IToastService _toastService
 
+@attribute [Authorize(Roles = "SuperAdmin")]
+
 <div class="py-2 p-md-3">
     <!-- Title + Filters-->
     <div class="d-sm-flex align-items-center justify-content-between pb-2">

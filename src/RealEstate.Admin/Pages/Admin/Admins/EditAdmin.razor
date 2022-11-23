@@ -83,7 +83,7 @@
 
 <AdminLayoutSetter>
     <ModalSection>
-        <ResetPasswordModal @ref="_resetPasswordModal" OnSubmitted="ResetPasswordSubmittedAsync"></ResetPasswordModal>
+        <ResetPasswordModal @ref="_resetPasswordModal" BaseUrl="admin/v1/admins" OnSubmitted="ResetPasswordSubmittedAsync"></ResetPasswordModal>
         <Modal @ref="_confirmDelete" ContentBtnAppearance="btn-danger" CloseText="@_localizer["No"]" OkText="@_localizer["Yes"]" OnOk="@DeleteAdmin" AutoHide="true">
             <h5 class="text-danger">@_localizer["Are you sure you want to delete this admin?"]</h5>
             <div class="mt-2">

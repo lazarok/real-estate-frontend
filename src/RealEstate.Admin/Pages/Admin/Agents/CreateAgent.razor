@@ -1,0 +1,186 @@
+@page "/admin/agents/create"
+
+@inject IHttpService _httpService
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigationManager
+@inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
+@inject IStringLocalizer<GlobalStrings> _localizer
+@inject IConfiguration _configuration
+@inject IToastService _toastService
+
+@attribute [Authorize(Roles = "SuperAdmin")]
+
+<div class="py-2 p-md-3">
+    <!-- Title + Filters-->
+    <div class="d-sm-flex align-items-center justify-content-between pb-2">
+        <h1 class="h3 mb-3 text-center text-sm-start">@_localizer["Create Agent"]</h1>
+    </div>
+    <EditForm Model="_model" OnValidSubmit="Submit">
+        <FluentValidationValidator/>
+
+        <div class="row mb-3 align-items-center">
+            <label class="col-md-3 form-label">@_localizer["Name"]</label>
+            <div class="col-md-9">
+                <InputText class="form-control" maxlength="50" placeholder=@_localizer["Enter the name"] @bind-Value="@_model.FullName"/>
+                <ValidationMessage For="@(() => _model.FullName)"/>
+            </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <label class="col-md-3 form-label">@_localizer["Email"]</label>
+            <div class="col-md-9">
+                <InputText class="form-control" type="email" maxlength="50" placeholder=@_localizer["Enter the email"] @bind-Value="@_model.Email"/>
+                <ValidationMessage For="@(() => _model.Email)"/>
+            </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <label class="col-md-3 form-label">@_localizer["Phone"]</label>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="ai-phone"></i>
+                    </span>
+                    <InputText class="form-control" type="tel" maxlength="15" placeholder=@_localizer["Enter the phone"] @bind-Value="@_model.Phone"/>
+                </div>
+                <ValidationMessage For="@(() => _model.Phone)"/>
+            </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <label class="col-md-3 form-label">@_localizer["Password"]</label>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <i class="ai-lock position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                    <div class="password-toggle w-100">
+                        <InputText class="form-control" type="password" maxlength="16" placeholder=@_localizer["Enter the password"] @bind-Value="@_model.Password"/>
+                        <label class="password-toggle-btn" aria-label="Show/hide password">
+                            <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator"></span>
+                        </label>
+                    </div>
+                </div>
+                <ValidationMessage For="@(() => _model.Password)"/>
+            </div>
+        </div>
+
+        <div class="row mb-3 mt-4 pt-4 border-top">
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="whatsapp">@_localizer["WhatsApp"]</label>
+                    <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the WhatsApp url"] @bind-Value="@_model.WhatsApp"/>
+                    <ValidationMessage For="@(() => _model.WhatsApp)"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="web">@_localizer["Website"]</label>
+                    <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the website url"] @bind-Value="@_model.Web"/>
+                    <ValidationMessage For="@(() => _model.Web)"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="facebook">@_localizer["Facebook"]</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="ai-facebook"></i>
+                        </span>
+                        <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the Facebook"] @bind-Value="@_model.Facebook"/>
+                    </div>
+                    <ValidationMessage For="@(() => _model.Facebook)"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="instagram">@_localizer["Instagram"]</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="ai-instagram"></i>
+                        </span>
+                        <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the Instagram"] @bind-Value="@_model.Instagram"/>
+                    </div>
+                    <ValidationMessage For="@(() => _model.Instagram)"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="twitter">@_localizer["Twitter"]</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="ai-twitter"></i>
+                        </span>
+                        <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the Twitter"] @bind-Value="@_model.Twitter"/>
+                    </div>
+                    <ValidationMessage For="@(() => _model.Twitter)"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="linkedin">@_localizer["LinkedIn"]</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="ai-linkedin"></i>
+                        </span>
+                        <InputText class="form-control" type="url" maxlength="255" placeholder=@_localizer["Enter the LinkedIn"] @bind-Value="@_model.LinkedIn"/>
+                    </div>
+                    <ValidationMessage For="@(() => _model.LinkedIn)"/>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="mb-3 pb-1">
+                    <label class="form-label px-0" for="phone">@_localizer["Address"]</label>
+                    <InputTextArea class="form-control" type="text" rows="2" maxlength="255" placeholder=@_localizer["Enter the address"] @bind-Value="@_model.Address"/>
+                    <ValidationMessage For="@(() => _model.Address)"/>
+                </div>
+            </div>
+        </div>
+
+
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <ErrorMessage Message="@_errorMessage"></ErrorMessage>
+        }
+
+        <div class="row mb-3 align-items-center mt-4 pt-4 border-top">
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary px-4 me-2" @onclick="@(() => _navigationManager.NavigateTo($"admin/admins"))">@_localizer["Close"]</button>
+                <ButtonRE IsBusy="_isBusy" class="btn btn-primary px-4" type="submit">@_localizer["Save"]</ButtonRE>
+            </div>
+        </div>
+
+    </EditForm>
+</div>
+
+
+@code {
+
+    private readonly AgentCreateModel _model = new();
+
+    private bool _isBusy;
+    private string _errorMessage;
+
+    private async Task Submit()
+    {
+        _errorMessage = null;
+
+        _isBusy = true;
+        var response = await _httpService.PostAsync("admin/v1/agents", _model);
+        _isBusy = false;
+
+        if (response.Success)
+        {
+            //_navigationManager.NavigateTo("admin/agents");
+            _toastService.Show(body: _localizer["Agent has been created successfully"], type: ToastType.Success);
+        }
+        else
+        {
+            _errorMessage = response.Error.ToString();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _jsRuntime.InvokeVoidAsync("initPasswordVisibilityToggle");
+    }
+
+}
