@@ -4,6 +4,8 @@
 @using Microsoft.Extensions.Localization
 
 @inject IHttpService _httpService
+@inject IJwtAuthenticationStateProvider _jwtAuthenticationStateProvider
+@inject NavigationManager _navigationManager
 @inject IToastService _toastService;
 @inject IStringLocalizer<GlobalStrings> _localizer
 
@@ -64,6 +66,13 @@
         </div>
 
         @_modalSection
+
+        <Modal @ref="_confirmDelete" ContentBtnAppearance="btn-danger" CloseText="@_localizer["No"]" OkText="@_localizer["Yes"]" OnOk="@Logout" AutoHide="true">
+            <h5 class="text-danger">@_localizer["Are you sure you want to close this session?"]</h5>
+            <div class="mt-2">
+                @(($"{_localizer["Session will be closed"]}."))
+            </div>
+        </Modal>
     </main>
 
     <Toast @ref="_toast"/>
@@ -87,6 +96,23 @@
     private RenderFragment _modalSection;
     
     private RenderFragment _toastsSection;
+    
+    private Modal _confirmDelete;
+    
+    public async Task ShowLogout()
+    {
+        if (_confirmDelete == null)
+        {
+            return;
+        }
+        await _confirmDelete.Show();
+    }
+
+    private async Task Logout()
+    {
+        await _jwtAuthenticationStateProvider.LogoutAsync();
+        _navigationManager.NavigateTo("/login");
+    }
 
     public void SetModalSection(RenderFragment modalSection)
     {

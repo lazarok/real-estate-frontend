@@ -30,7 +30,7 @@
 
             <h3 class="d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3">Users</h3>
 
-            <NavLink href="/agent/agents" Match="NavLinkMatch.Prefix" class="d-flex align-items-center nav-link-style px-4 py-3">
+            <NavLink href="/admin/agents" Match="NavLinkMatch.Prefix" class="d-flex align-items-center nav-link-style px-4 py-3">
                 <i class="ai-user fs-lg opacity-60 me-2"></i>Agents
             </NavLink>
 
@@ -44,8 +44,6 @@
             <NavLink href="/admin/profile" Match="NavLinkMatch.Prefix" class="d-flex align-items-center nav-link-style px-4 py-3 border-top">
                 <i class="ai-users fs-lg opacity-60 me-2"></i>@_localizer["Profile info"]
             </NavLink>
-
-            <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top">Payment methods</a>
 
             <a class="d-flex align-items-center nav-link-style px-4 py-3 border-top" href="javascript:void(0)" @onclick="Logout">
                 <i class="ai-log-out fs-lg opacity-60 me-2"></i>Sign out
@@ -93,11 +91,10 @@
 
     [CascadingParameter]
     public AdminLayout Layout { get; set; }
-    
-    private async void Logout()
+
+    private async Task Logout()
     {
-        await _jwtAuthenticationStateProvider.LogoutAsync();
-        _navigationManager.NavigateTo("/login");
+        await Layout.ShowLogout();
     }
 
 }
